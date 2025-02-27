@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hospital/drawer_pages/Test_Booking.dart';
 import 'package:hospital/drawer_pages/consulation.dart';
 import 'package:hospital/drawer_pages/helpCenter.dart';
+import 'package:hospital/drawer_pages/myBooking.dart';
 import 'package:hospital/drawer_pages/my_doctor.dart';
 import 'package:hospital/drawer_pages/orders.dart';
+import 'package:hospital/drawer_pages/profile.dart';
 import 'package:hospital/drawer_pages/question.dart';
 import 'package:hospital/drawer_pages/records.dart';
 import 'package:hospital/drawer_pages/reminder.dart';
@@ -17,22 +20,37 @@ class CustomDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          UserAccountsDrawerHeader(
-            accountName: const Text(
-              'Chakshit',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            accountEmail: const Text('View and Edit Profile'),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.grey[300],
-              child: const Icon(Icons.person, size: 40, color: Colors.white),
-            ),
-            decoration: const BoxDecoration(
-              color: Color(0xff0077B6),
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+            },
+            child: UserAccountsDrawerHeader(
+              accountName: const Text(
+                'Chakshit',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              accountEmail: const Text('View and Edit Profile'),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.grey[300],
+                child: const Icon(Icons.person, size: 40, color: Colors.white),
+              ),
+              decoration: const BoxDecoration(
+                color: Color(0xff0077B6),
+              ),
             ),
           ),
-          _buildMenuItem(Icons.calendar_today, 'Appointments', () {}),
-          _buildMenuItem(Icons.science, 'Test Bookings', () {}),
+          _buildMenuItem(Icons.calendar_today, 'Appointments', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Mybooking()),
+            );
+          }),
+          _buildMenuItem(Icons.science, 'Test Bookings', () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TestBooking()),
+            );
+          }),
           _buildMenuItem(Icons.shopping_cart, 'Orders', () {
             Navigator.push(
               context,

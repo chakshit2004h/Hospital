@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hospital/doctor.dart';
+import 'package:hospital/helpers/homepage_part.dart';
+import 'package:hospital/helpers/homepage_part_2.dart';
+import 'package:hospital/helpers/homepage_part_3.dart';
 import 'package:hospital/online.dart';
 import 'package:hospital/drawer_pages/drawer.dart';
 import 'package:hospital/widgets/style.dart';
@@ -20,8 +23,27 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   late Size mq;
+  bool _isScrolled = false;
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 50) {
+        setState(() {
+          _isScrolled = true;
+        });
+      } else {
+        setState(() {
+          _isScrolled = false;
+        });
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +55,7 @@ class _HomepageState extends State<Homepage> {
       drawer: CustomDrawer(),
       body: Column(
         children: [
+          if(!_isScrolled)...[
           Stack(
             children: [
               ClipRRect(
@@ -42,10 +65,10 @@ class _HomepageState extends State<Homepage> {
                 ),
                 child: Container(
                   width: double.infinity,
-                  height: screenHeight * 0.25,
+                  height: screenHeight * 0.21,
                   color: const Color(0xff0077B6),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 15.0, top: 55.0),
+                    padding: const EdgeInsets.only(left: 15.0, top: 50.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -55,10 +78,10 @@ class _HomepageState extends State<Homepage> {
                               onPressed: () {
                                 _scaffoldKey.currentState?.openDrawer();
                               },
-                              icon: Icon(
-                                Icons.account_circle_sharp,
-                                color: Colors.grey[400],
-                                size: 50,
+                              icon: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.grey[300],
+                                child: const Icon(Icons.person, size: 30, color: Colors.white),
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -68,7 +91,7 @@ class _HomepageState extends State<Homepage> {
                                 Text(
                                   widget.userName,
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
@@ -76,7 +99,7 @@ class _HomepageState extends State<Homepage> {
                                 Text(
                                   widget.userEmail,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     color: Colors.grey[300],
                                   ),
                                 ),
@@ -84,9 +107,10 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 10),
                         // Search Bar
                         Container(
+                          height: 45,
                           margin: const EdgeInsets.symmetric(horizontal: 15),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -107,7 +131,7 @@ class _HomepageState extends State<Homepage> {
                               const Icon(Icons.search, color: Colors.grey),
                               border: InputBorder.none,
                               contentPadding:
-                              const EdgeInsets.symmetric(vertical: 14),
+                              const EdgeInsets.symmetric(vertical: 12),
                             ),
                           ),
                         ),
@@ -117,7 +141,7 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
             ],
-          ),
+          ),],
           Expanded(
             child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -159,7 +183,7 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ),
                           ],
-            
+
                         ),
                       ),
                     Padding(
@@ -192,7 +216,7 @@ class _HomepageState extends State<Homepage> {
                         ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.asset("assets/images/img10.jpg",width: 80,height: 80,fit: BoxFit.fill,)),
-            
+
                       ],
                     ),
                     Row(
@@ -223,7 +247,7 @@ class _HomepageState extends State<Homepage> {
                         ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.asset("assets/images/plus.png",width: 60,height: 60,)),
-            
+
                       ],
                     ),
                     Row(
@@ -310,6 +334,9 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ),
                     const SizedBox(height: 20,),
+                    SafeArea(child: Expanded(child: HomepagePart())),
+                    SafeArea(child: Expanded(child: HomepagePart2())),
+                    SafeArea(child: Expanded(child: HomepagePart3())),
                   ],
                 ),
               ),

@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Homepage(userName: "chakhsit", userEmail: "chakshit2004@gmail.com"),
+      home: SplashScreen(),
     );
   }
 }
