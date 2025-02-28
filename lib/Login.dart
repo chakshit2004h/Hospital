@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hospital/homepage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
@@ -18,22 +17,44 @@ class _LoginState extends State<Login> {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
+    if (email.isEmpty || password.isEmpty) {
+      showErrorDialog("Please enter both email and password.");
+      return;
+    }
+
     try {
-      var userDoc = await FirebaseFirestore.instance.collection('users').doc(email).get();
-      if (userDoc.data()?['email'] == email && userDoc.data()?['password'] == password) {
+      // Sign in with Firebase Authentication
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // If login is successful, navigate to the homepage
+      if (userCredential.user != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => Homepage(
-              userName: userDoc.data()?['name'] ?? 'User',
+              userName: userCredential.user!.displayName ?? 'User',
               userEmail: email,
             ),
           ),
         );
+      }
+    } on FirebaseAuthException catch (e) {
+      // Handle specific Firebase Auth errors
+      print("FirebaseAuthException: ${e.code} - ${e.message}");
+      if (e.code == 'user-not-found') {
+        showErrorDialog("No user found with this email.");
+      } else if (e.code == 'wrong-password') {
+        showErrorDialog("Incorrect password.");
       } else {
-        showErrorDialog(userDoc.exists ? "Incorrect password." : "No user found with this email.");
+        showErrorDialog("An error occurred. Please try again.");
       }
     } catch (e) {
+      // Print the full error and stack trace
+      print("General Error: $e");
+      print("Stack Trace: ${e.toString()}");
       showErrorDialog("An error occurred. Please try again.");
     }
   }
@@ -53,7 +74,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -137,12 +157,12 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const SizedBox(height: 20),
-                    const SizedBox(
+                    SizedBox(
                       width: 250,
                       child: TextField(
+                        controller: passwordController,
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.password_outlined, size: 30),
                           label: Text(
                             "Password",
@@ -198,7 +218,6 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-
         ],
       ),
     );

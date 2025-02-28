@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hospital/book_clinic.dart';
+import 'package:hospital/book_clinic_2.dart';
 
 class Doctor extends StatefulWidget {
   const Doctor({super.key});
@@ -177,7 +179,7 @@ class _DoctorState extends State<Doctor> {
                             padding: const EdgeInsets.only(left: 7.0),
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                // Add your onPressed action here
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => BookClinic()));
                               },
                               icon: const Icon(
                                 Icons.call,
@@ -334,7 +336,7 @@ class _DoctorState extends State<Doctor> {
                             padding: const EdgeInsets.only(left: 7.0),
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                // Add your onPressed action here
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => BookClinic2()));
                               },
                               icon: const Icon(
                                 Icons.call,
